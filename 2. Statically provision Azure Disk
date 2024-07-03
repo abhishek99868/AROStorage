@@ -40,37 +40,7 @@ spec:
   storageClassName: managed-csi
 EOF
 
-oc apply -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: azure-disk-pod-static
-spec:
-  containers:
-  - image: andreibarbu95/my-aro-web-app:v1
-    name: azure-disk-static-pod
-    volumeMounts:
-      - name: azure
-        mountPath: /mnt/azure
-  volumes:
-    - name: azure
-      persistentVolumeClaim:
-        claimName: azure-disk-pvc-static
-  nodeSelector:
-    topology.disk.csi.azure.com/zone: eastus-2
-EOF
-
 oc get pod,pv,pvc
-
-df -h /mnt/azure
-
-cd /mnt/azure
-
-ls
-
-touch test.txt
-
-oc delete pod azure-disk-pod-static
 
 oc apply -f - <<EOF
 apiVersion: v1
